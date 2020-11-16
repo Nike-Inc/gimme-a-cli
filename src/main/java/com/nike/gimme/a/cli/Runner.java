@@ -68,6 +68,7 @@ public class Runner {
         } catch (Exception e) {
             terminal.error(e);
             help.printUsage(commandName);
+            System.exit(1);
         }
     }
 }
