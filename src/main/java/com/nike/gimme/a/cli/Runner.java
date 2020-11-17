@@ -9,6 +9,10 @@
 package com.nike.gimme.a.cli;
 
 import com.beust.jcommander.JCommander;
+import com.github.tomaslanger.chalk.Chalk;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +22,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class Runner {
 
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     private final JCommander jCommander;
-    private final Terminal terminal;
     private final Help help;
     private final Registry registry;
 
@@ -28,12 +33,10 @@ public class Runner {
      */
     @Autowired
     public Runner(JCommander jCommander,
-                  Terminal terminal,
                   Help help,
                   Registry registry) {
 
         this.jCommander = jCommander;
-        this.terminal = terminal;
         this.help = help;
         this.registry = registry;
 
@@ -66,7 +69,7 @@ public class Runner {
                 command.execute();
             }
         } catch (Exception e) {
-            terminal.error(e);
+            log.error(Chalk.on(ExceptionUtils.getStackTrace(e)).red().bold().toString());
             help.printUsage(commandName);
             System.exit(1);
         }

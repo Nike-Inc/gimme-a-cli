@@ -9,10 +9,12 @@
 package com.nike.gimme.a.cli;
 
 import com.beust.jcommander.JCommander;
+import com.beust.jcommander.internal.Lists;
 import com.github.tomaslanger.chalk.Chalk;
-import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -29,19 +31,19 @@ import java.util.Arrays;
 @Component
 public class Help {
 
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     private static final String INDENT = "    ";
 
     private final Config config;
     private final GlobalOptions globalOptions;
     private final JCommander commander;
-    private final Terminal terminal;
 
     @Autowired
-    public Help(Config config, GlobalOptions globalOptions, JCommander commander, Terminal terminal) {
+    public Help(Config config, GlobalOptions globalOptions, JCommander commander) {
         this.config = config;
         this.globalOptions = globalOptions;
         this.commander = commander;
-        this.terminal = terminal;
     }
 
     /**
@@ -56,7 +58,7 @@ public class Help {
      * Print usage for either the command that was invoked or all commands
      */
     public void printUsage(@Nullable String commandName) {
-        terminal.info();
+        log.info("");
         if (commandName != null) {
             commander.usage(commandName);
         } else {
@@ -79,19 +81,19 @@ public class Help {
      */
     private void printGeneralUsage() {
 
-        terminal.bold("NAME");
-        terminal.info(INDENT + config.getCliName()
+        log.info(Chalk.on("NAME").bold().toString());
+        log.info(INDENT + config.getCliName()
                 + (config.getSingleLineDescription() != null ? " - " + config.getSingleLineDescription() : ""));
-        terminal.info();
+        log.info("");
         if (StringUtils.isNotBlank(config.getLongDescription())) {
-            terminal.bold("DESCRIPTION");
-            terminal.info(config.getLongDescription());
-            terminal.info();
+            log.info(Chalk.on("DESCRIPTION").bold().toString());
+            log.info(config.getLongDescription());
+            log.info("");
         }
-        terminal.bold("USAGE");
-        terminal.info(INDENT + config.getCliName() + " [--help] [<command-name> [command-args]]");
-        terminal.info();
-        terminal.bold("COMMANDS");
+        log.info(Chalk.on("USAGE").bold().toString());
+        log.info(INDENT + config.getCliName() + " [--help] [<command-name> [command-args]]");
+        log.info("");
+        log.info(Chalk.on("COMMANDS").bold().toString());
         commander.getCommands().keySet().forEach(command -> {
             String msg = INDENT + Chalk.on(command).bold();
             String description = commander.getCommandDescription(command);
@@ -99,10 +101,9 @@ public class Help {
                 // Use the first line of the description only for this summary page
                 msg = msg + " - " + StringUtils.substringBefore(description, ".") + ".";
             }
-            terminal.info(msg);
+            log.info(msg);
         });
-        terminal.info();
-
+        log.info("");
     }
 
 }

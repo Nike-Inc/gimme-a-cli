@@ -1,0 +1,14 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.nike" level="info"/>
+
+    <root level="off">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

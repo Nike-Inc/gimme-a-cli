@@ -10,10 +10,10 @@ package com.nike.gimme.a.cli;
 
 import com.beust.jcommander.JCommander;
 import com.nike.gimme.a.cli.commands.FakeCommand;
-import com.nike.gimme.a.cli.testutils.StringBufferTerminal;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GimmeACliTest {
 
@@ -28,16 +28,20 @@ public class GimmeACliTest {
 
         GimmeACli gimmeACli = new GimmeACli(config);
 
-        StringBufferTerminal terminal = new StringBufferTerminal();
-        gimmeACli.getContext().registerBean(Terminal.class, () -> terminal);
+        OutputCapture.begin();
 
         gimmeACli.run(new String[]{"--help"});
 
-        assertTrue(terminal.getContents().contains("NAME\n    my-cli - my-single-line-description\n"));
-        assertTrue(terminal.getContents().contains("USAGE\n    my-cli [--help] [<command-name> [command-args]]"));
-        assertTrue(terminal.getContents().contains("my-long-description"));
-        assertTrue(terminal.getContents().contains("fake"));
-        assertTrue(terminal.getContents().contains("hello-world"));
+        String output = OutputCapture.getStdOut();
+        OutputCapture.restoreSystemOut();
+
+        System.out.println(output);
+
+        assertTrue(output.contains("    my-cli - my-single-line-description\n"));
+        assertTrue(output.contains("    my-cli [--help] [<command-name> [command-args]]"));
+        assertTrue(output.contains("my-long-description"));
+        assertTrue(output.contains("fake"));
+        assertTrue(output.contains("hello-world"));
     }
 
     @Test
@@ -73,19 +77,18 @@ public class GimmeACliTest {
 
         GimmeACli gimmeACli = new GimmeACli(config);
 
-        StringBufferTerminal terminal = new StringBufferTerminal();
-        gimmeACli.getContext().registerBean(Terminal.class, () -> terminal);
+        OutputCapture.begin();
 
         gimmeACli.run(new String[]{});
 
-        assertTrue(terminal.getContents().contains("NAME\n" +
-                "    my-cli\n" +
-                "\n" +
-                "USAGE\n" +
-                "    my-cli [--help] [<command-name> [command-args]]"));
+        String output = OutputCapture.getStdOut();
+        OutputCapture.restoreSystemOut();
 
-        assertTrue(terminal.getContents().contains("fake"));
-        assertTrue(terminal.getContents().contains("hello-world"));
+        System.out.println(output);
+        assertTrue(output.contains("NAME"));
+        assertTrue(output.contains("    my-cli [--help] [<command-name> [command-args]]"));
+        assertTrue(output.contains("fake"));
+        assertTrue(output.contains("hello-world"));
     }
 
     @Test
@@ -132,10 +135,13 @@ public class GimmeACliTest {
 
         GimmeACli gimmeACli = new GimmeACli(config);
 
-        StringBufferTerminal terminal = new StringBufferTerminal();
-        gimmeACli.getContext().registerBean(Terminal.class, () -> terminal);
 
-        gimmeACli.run(new String[] {"hello-world", "--name", "foo"});
-        assertEquals("Hello foo\n", terminal.getContents());
+        OutputCapture.begin();
+
+        gimmeACli.run(new String[]{"hello-world", "--name", "foo"});
+
+        String output = OutputCapture.getStdOut();
+        OutputCapture.restoreSystemOut();
+        assertEquals("Hello foo\n", output);
     }
 }

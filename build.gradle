@@ -1,51 +1,42 @@
 /*
- * Copyright 2019-present, Nike, Inc.
+ * Copyright 2020-present, Nike, Inc.
  * All rights reserved.
  * 
  * This source code is licensed under the Apache-2.0 license found in
  * the LICENSE file in the root directory of this source tree.
  */
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
-    }
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'idea'
+    id 'com.jfrog.bintray' version "1.8.5"
 }
 
 repositories {
     mavenCentral()
     jcenter()
+    mavenLocal()
 }
-
-
-apply plugin: 'java-library'
-apply plugin: 'idea'
-apply plugin: 'maven'
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
 
 //http://www.gradle.org/docs/current/userguide/java_plugin.html
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    compile 'commons-io:commons-io:2.4'
-    compile 'org.apache.commons:commons-lang3:3.9'
-    compile 'org.apache.commons:commons-collections4:4.1'
-    
-    compile 'com.beust:jcommander:1.72'
-    compile 'com.github.tomas-langer:chalk:1.0.2'
-    
-    compile 'org.reflections:reflections:0.9.11'
-    compile 'org.springframework:spring-context:5.1.7.RELEASE'
 
-    compile 'org.slf4j:slf4j-api:1.7.26'
-    
-    testCompile "junit:junit:4.12"
-    testCompile 'org.slf4j:slf4j-nop:1.7.26'
+    api 'com.beust:jcommander:1.72'
+    api 'org.springframework:spring-context:5.2.11.RELEASE'
+    api 'org.slf4j:slf4j-api:1.7.30'
+
+    implementation 'com.github.tomas-langer:chalk:1.0.2'
+    implementation 'commons-io:commons-io:2.8.0'
+    implementation 'org.apache.commons:commons-lang3:3.11'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'org.reflections:reflections:0.9.12'
+
+    testImplementation "junit:junit:4.13.1"
+    testImplementation "ch.qos.logback:logback-classic:1.2.3"
 }
 
 idea {
@@ -56,9 +47,8 @@ idea {
 }
 
 jar {
-    def releaseVersion = version
     doFirst {
-        ant.replace(file: "$buildDir/resources/main/gimme-a-cli.properties", token: "@@RELEASE@@", value: releaseVersion)
+        ant.replace(file: "$buildDir/resources/main/gimme-a-cli.properties", token: "@@RELEASE@@", value: archiveVersion)
     }
 }
 
@@ -76,4 +66,5 @@ task javadocJar(type: Jar) {
     archiveClassifier = 'javadoc'
 }
 
+apply from: 'gradle/publishing.gradle'
 apply from: 'gradle/bintray.gradle'

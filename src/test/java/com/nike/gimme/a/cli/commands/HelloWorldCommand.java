@@ -10,20 +10,19 @@ package com.nike.gimme.a.cli.commands;
 
 import com.beust.jcommander.Parameter;
 import com.nike.gimme.a.cli.Command;
-import com.nike.gimme.a.cli.Terminal;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class HelloWorldCommand implements Command {
 
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     @Parameter(names = {"--name"}, required = true)
     private String name;
 
-    @Autowired
-    private Terminal terminal;
-
     @Override
     public void execute() {
-        terminal.info("Hello " + name);
+        log.info("Hello " + name);
     }
 }
