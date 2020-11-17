@@ -6,13 +6,26 @@
  * the LICENSE file in the root directory of this source tree.
  */
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
+    }
+}
+
 repositories {
     mavenCentral()
     jcenter()
 }
 
+
 apply plugin: 'java-library'
 apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 //http://www.gradle.org/docs/current/userguide/java_plugin.html
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -63,4 +76,4 @@ task javadocJar(type: Jar) {
     archiveClassifier = 'javadoc'
 }
 
-apply from: 'gradle/publishing.gradle'
+apply from: 'gradle/bintray.gradle'

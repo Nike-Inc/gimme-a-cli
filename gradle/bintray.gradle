@@ -1,0 +1,41 @@
+/*
+ * Copyright 2020-present, Nike, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the Apache-2.0 license found in
+ * the LICENSE file in the root directory of this source tree.
+ */
+
+
+def bintrayVersion = "$version"
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.bintrayUser : System.getenv('BINTRAY_USER') ?: ''
+    key = project.hasProperty('bintrayKey') ? project.bintrayKey : System.getenv('BINTRAY_KEY') ?: ''
+
+    configurations = ['archives']
+
+    pkg {
+        repo = 'maven'
+        name = 'gimme-a-cli'
+        userOrg = 'nike'
+        licenses = ['Apache-2.0']
+        websiteUrl = 'https://github.com/Nike-Inc/gimme-a-cli'
+        issueTrackerUrl = 'https://github.com/Nike-Inc/gimme-a-cli/issues'
+        vcsUrl = 'https://github.com/Nike-Inc/gimme-a-cli.git'
+        githubRepo = 'Nike-Inc/gimme-a-cli'
+        githubReleaseNotesFile = 'CHANGELOG.md'
+
+        version {
+            name = bintrayVersion
+            gpg {
+                sign = true
+            }
+        }
+    }
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
