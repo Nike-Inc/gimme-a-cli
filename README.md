@@ -68,13 +68,13 @@ Gimme a CLI is a Java library for creating quick and easy command line interface
     ```
     Spring setup is done for you using classpath scanning.
 4. Configure SLF4J logging, e.g.,
-     1. Include logback as a dependency
+     1. Include logback as a dependency.
         ``` groovy
         dependencies {
             implementation "ch.qos.logback:logback-classic:1.1.11"
         }
         ```
-     2. Provide a logback.xml
+     2. Provide a [logback.xml](https://github.com/Nike-Inc/gimme-a-cli-starter-project/blob/master/src/main/resources/logback.xml).
 
 All of these steps have been done for you in the 
 [example starter project](https://github.com/Nike-Inc/gimme-a-cli-starter-project) which can simply be cloned and
