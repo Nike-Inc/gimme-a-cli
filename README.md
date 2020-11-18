@@ -1,5 +1,6 @@
-[ ![Download](https://api.bintray.com/packages/nike/maven/gimme-a-cli/images/download.svg) ](https://bintray.com/nike/maven/gimme-a-cli/_latestVersion)
+![Java CI with Gradle](https://github.com/Nike-Inc/gimme-a-cli/workflows/Java%20CI%20with%20Gradle/badge.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[ ![Download](https://api.bintray.com/packages/nike/maven/gimme-a-cli/images/download.svg) ](https://bintray.com/nike/maven/gimme-a-cli/_latestVersion)
 
 # Gimme a CLI
 
